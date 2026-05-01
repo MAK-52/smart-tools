@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Asad Smart Tools</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav {
+            background: #555;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav button {
+            margin: 5px;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tool {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .active {
+            display: block;
+        }
+
+        textarea {
+            width: 80%;
+            height: 120px;
+        }
+
+        input {
+            padding: 8px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Asad Smart Tools</h1>
+    </header>
+
+    <nav>
+        <button onclick="showTool('word')">Word Counter</button>
+        <button onclick="showTool('reverse')">Text Reverse</button>
+        <button onclick="showTool('password')">Password</button>
+        <button onclick="showTool('case')">Uppercase</button>
+        <button onclick="showTool('random')">Random Number</button>
+    </nav>
+
+    <!-- Word Counter -->
+    <div id="word" class="tool active">
+        <h2>Word Counter</h2>
+        <textarea id="text"></textarea><br>
+        <button onclick="countWords()">Count</button>
+        <p>Words: <span id="words">0</span></p>
+    </div>
+
+    <!-- Reverse -->
+    <div id="reverse" class="tool">
+        <h2>Text Reverse</h2>
+        <textarea id="rev"></textarea><br>
+        <button onclick="reverseText()">Reverse</button>
+        <p id="revResult"></p>
+    </div>
+
+    <!-- Password -->
+    <div id="password" class="tool">
+        <h2>Password Generator</h2>
+        <input type="number" id="len" placeholder="Length">
+        <button onclick="genPass()">Generate</button>
+        <p id="pass"></p>
+    </div>
+
+    <!-- Uppercase -->
+    <div id="case" class="tool">
+        <h2>Uppercase Converter</h2>
+        <textarea id="caseText"></textarea><br>
+        <button onclick="toUpper()">Convert</button>
+        <p id="caseResult"></p>
+    </div>
+
+    <!-- Random Number -->
+    <div id="random" class="tool">
+        <h2>Random Number</h2>
+        <input type="number" id="min" placeholder="Min">
+        <input type="number" id="max" placeholder="Max"><br>
+        <button onclick="genRandom()">Generate</button>
+        <p id="randResult"></p>
+    </div>
+
+    <script>
+        function showTool(id) {
+            document.querySelectorAll('.tool').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function countWords() {
+            let t = document.getElementById("text").value.trim().split(/\s+/);
+            document.getElementById("words").innerText = t[0] === "" ? 0 : t.length;
+        }
+
+        function reverseText() {
+            let t = document.getElementById("rev").value;
+            document.getElementById("revResult").innerText = t.split("").reverse().join("");
+        }
+
+        function genPass() {
+            let l = document.getElementById("len").value;
+            let c = "abcABC123!@#";
+            let p = "";
+            for (let i = 0; i < l; i++) {
+                p += c[Math.floor(Math.random() * c.length)];
+            }
+            document.getElementById("pass").innerText = p;
+        }
+
+        function toUpper() {
+            let t = document.getElementById("caseText").value;
+            document.getElementById("caseResult").innerText = t.toUpperCase();
+        }
+
+        function genRandom() {
+            let min = parseInt(document.getElementById("min").value);
+            let max = parseInt(document.getElementById("max").value);
+            let r = Math.floor(Math.random() * (max - min + 1)) + min;
+            document.getElementById("randResult").innerText = r;
+        }
+    </script>
+
+</body>
+
+</html>
