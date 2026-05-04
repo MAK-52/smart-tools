@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tools Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #0b1220;
+            color: #e5e7eb;
+        }
+
+        header {
+            padding: 38px 20px;
+            text-align: center;
+            background: #111827;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        header h1 {
+            margin-bottom: 10px;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            letter-spacing: 0;
+        }
+
+        header p {
+            max-width: 680px;
+            margin: 0 auto;
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.96);
+            border-bottom: 1px solid #1f2937;
+        }
+
+        nav a {
+            color: #e5e7eb;
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background: #2563eb;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        main {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 34px 0 48px;
+        }
+
+        section {
+            scroll-margin-top: 76px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: end;
+            margin-bottom: 18px;
+        }
+
+        .section-header h2 {
+            font-size: 1.6rem;
+        }
+
+        .section-header p,
+        .about p {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        .search-bar {
+            margin-bottom: 22px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 260px;
+            padding: 20px;
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #334155;
+            box-shadow: 0 20px 44px rgba(0, 0, 0, 0.25);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+        }
+
+        label {
+            display: block;
+            color: #cbd5e1;
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            min-height: 44px;
+            padding: 12px;
+            margin-top: 8px;
+            color: #ffffff;
+            background: #0b1220;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.18);
+        }
+
+        button {
+            min-height: 42px;
+            padding: 10px 14px;
+            color: #ffffff;
+            background: #2563eb;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        button.secondary {
+            background: #334155;
+        }
+
+        button.secondary:hover {
+            background: #475569;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .result {
+            margin-top: auto;
+            padding: 12px;
+            color: #bfdbfe;
+            background: #0b1220;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .result strong {
+            color: #ffffff;
+        }
+
+        .status {
+            min-height: 20px;
+            color: #93c5fd;
+            font-size: 0.9rem;
+        }
+
+        .calculator-display {
+            font-size: 1.4rem;
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .calculator-grid button {
+            min-height: 46px;
+        }
+
+        .about {
+            margin-top: 34px;
+            padding: 22px;
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 640px) {
+            nav {
+                gap: 6px;
+                overflow-x: auto;
+                justify-content: flex-start;
+            }
+
+            nav a {
+                white-space: nowrap;
+            }
+
+            .section-header {
+                display: block;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header id="home">
+        <h1>Smart Tools Dashboard</h1>
+        <p>Fast browser tools for writing, text editing, passwords, and everyday calculations.</p>
+    </header>
+
+    <nav aria-label="Primary navigation">
+        <a href="#home" class="active">Home</a>
+        <a href="#tools">Tools</a>
+        <a href="#about">About</a>
+    </nav>
+
+    <main>
+        <section id="tools">
+            <div class="section-header">
+                <div>
+                    <h2>Tools</h2>
+                    <p>Search or use any tool below. Everything runs locally in your browser.</p>
+                </div>
+            </div>
+
+            <div class="search-bar">
+                <label for="toolSearch">Search tools</label>
+                <input type="search" id="toolSearch" placeholder="Try word, password, calculator...">
+            </div>
+
+            <div class="grid" id="toolsGrid">
+                <article class="card" data-name="word counter text count characters sentences">
+                    <h3>Word Counter</h3>
+                    <label for="wordInput">Text</label>
+                    <textarea id="wordInput" placeholder="Type or paste your text here..."></textarea>
+                    <div class="button-row">
+                        <button type="button" id="copyWordStats">Copy Stats</button>
+                        <button type="button" class="secondary" id="downloadWordStats">Download Stats</button>
+                        <button type="button" class="secondary" id="clearWordInput">Clear</button>
+                    </div>
+                    <p class="status" id="wordStatus"></p>
+                    <div class="result" id="wordResult">
+                        Words: <strong id="wordCount">0</strong><br>
+                        Characters: <strong id="characterCount">0</strong><br>
+                        Characters without spaces: <strong id="characterNoSpaceCount">0</strong><br>
+                        Sentences: <strong id="sentenceCount">0</strong>
+                    </div>
+                </article>
+
+                <article class="card" data-name="text reverse backwards copy">
+                    <h3>Text Reverse</h3>
+                    <label for="reverseInput">Text</label>
+                    <textarea id="reverseInput" placeholder="Enter text to reverse..."></textarea>
+                    <div class="button-row">
+                        <button type="button" id="reverseButton">Reverse</button>
+                        <button type="button" class="secondary" id="copyReverseResult">Copy</button>
+                        <button type="button" class="secondary" id="downloadReverseResult">Download</button>
+                    </div>
+                    <p class="status" id="reverseStatus"></p>
+                    <div class="result" id="reverseResult">Reversed text will appear here.</div>
+                </article>
+
+                <article class="card" data-name="case converter uppercase lowercase text">
+                    <h3>Character Case Converter</h3>
+                    <label for="caseInput">Text</label>
+                    <textarea id="caseInput" placeholder="Enter text to convert..."></textarea>
+                    <div class="button-row">
+                        <button type="button" id="upperCaseButton">Uppercase</button>
+                        <button type="button" id="lowerCaseButton">Lowercase</button>
+                        <button type="button" class="secondary" id="copyCaseResult">Copy</button>
+                        <button type="button" class="secondary" id="downloadCaseResult">Download</button>
+                    </div>
+                    <p class="status" id="caseStatus"></p>
+                    <div class="result" id="caseResult">Converted text will appear here.</div>
+                </article>
+
+                <article class="card" data-name="password generator random secure copy">
+                    <h3>Password Generator</h3>
+                    <label for="passwordLength">Password length</label>
+                    <input type="number" id="passwordLength" min="6" max="40" value="14">
+                    <div class="button-row">
+                        <button type="button" id="generatePassword">Generate</button>
+                        <button type="button" class="secondary" id="copyPassword">Copy</button>
+                        <button type="button" class="secondary" id="downloadPassword">Download</button>
+                    </div>
+                    <p class="status" id="passwordStatus"></p>
+                    <div class="result" id="passwordResult">Your password will appear here.</div>
+                </article>
+
+                <article class="card" data-name="basic calculator math add subtract multiply divide">
+                    <h3>Basic Calculator</h3>
+                    <input type="text" class="calculator-display" id="calculatorDisplay" value="0" readonly>
+                    <div class="calculator-grid">
+                        <button type="button" data-calc="clear" class="secondary">C</button>
+                        <button type="button" data-calc="backspace" class="secondary">DEL</button>
+                        <button type="button" data-calc="%">%</button>
+                        <button type="button" data-calc="/">/</button>
+                        <button type="button" data-calc="7">7</button>
+                        <button type="button" data-calc="8">8</button>
+                        <button type="button" data-calc="9">9</button>
+                        <button type="button" data-calc="*">*</button>
+                        <button type="button" data-calc="4">4</button>
+                        <button type="button" data-calc="5">5</button>
+                        <button type="button" data-calc="6">6</button>
+                        <button type="button" data-calc="-">-</button>
+                        <button type="button" data-calc="1">1</button>
+                        <button type="button" data-calc="2">2</button>
+                        <button type="button" data-calc="3">3</button>
+                        <button type="button" data-calc="+">+</button>
+                        <button type="button" data-calc="0">0</button>
+                        <button type="button" data-calc=".">.</button>
+                        <button type="button" data-calc="equals">=</button>
+                        <button type="button" data-calc="copy" class="secondary">Copy</button>
+                    </div>
+                    <p class="status" id="calculatorStatus"></p>
+                    <div class="result" id="calculatorMessage">Use the buttons to calculate.</div>
+                </article>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <h2>About</h2>
+            <p>This dashboard uses plain HTML, CSS, and JavaScript. No external libraries are required, and all tool
+                actions happen directly in the browser.</p>
+        </section>
+    </main>
+
+    <script>
+        const navLinks = document.querySelectorAll("nav a");
+        const sections = document.querySelectorAll("header[id], section[id]");
+        const toolSearch = document.getElementById("toolSearch");
+        const toolCards = document.querySelectorAll(".card");
+
+        const wordInput = document.getElementById("wordInput");
+        const wordCount = document.getElementById("wordCount");
+        const characterCount = document.getElementById("characterCount");
+        const characterNoSpaceCount = document.getElementById("characterNoSpaceCount");
+        const sentenceCount = document.getElementById("sentenceCount");
+        const wordResult = document.getElementById("wordResult");
+        const wordStatus = document.getElementById("wordStatus");
+
+        const reverseInput = document.getElementById("reverseInput");
+        const reverseResult = document.getElementById("reverseResult");
+        const reverseStatus = document.getElementById("reverseStatus");
+
+        const caseInput = document.getElementById("caseInput");
+        const caseResult = document.getElementById("caseResult");
+        const caseStatus = document.getElementById("caseStatus");
+
+        const passwordLength = document.getElementById("passwordLength");
+        const passwordResult = document.getElementById("passwordResult");
+        const passwordStatus = document.getElementById("passwordStatus");
+
+        const calculatorDisplay = document.getElementById("calculatorDisplay");
+        const calculatorMessage = document.getElementById("calculatorMessage");
+        const calculatorStatus = document.getElementById("calculatorStatus");
+
+        let calculatorValue = "";
+
+        // Copy text to clipboard with a fallback for older browsers.
+        function showStatus(statusElement, message) {
+            statusElement.textContent = message;
+            setTimeout(() => {
+                statusElement.textContent = "";
+            }, 1500);
+        }
+
+        function copyText(text, statusElement) {
+            if (!text || text.trim() === "") {
+                showStatus(statusElement, "Nothing to copy yet.");
+                return;
+            }
+
+            const temporaryInput = document.createElement("textarea");
+
+            function copyWithFallback() {
+                temporaryInput.value = text;
+                document.body.appendChild(temporaryInput);
+                temporaryInput.select();
+                document.execCommand("copy");
+                temporaryInput.remove();
+                showStatus(statusElement, "Copied to clipboard.");
+            }
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showStatus(statusElement, "Copied to clipboard.");
+                }).catch(copyWithFallback);
+                return;
+            }
+
+            copyWithFallback();
+        }
+
+        // Download plain text as a file.
+        function downloadText(filename, text, statusElement) {
+            if (!text || text.trim() === "") {
+                showStatus(statusElement, "Nothing to download yet.");
+                return;
+            }
+
+            const file = new Blob([text], { type: "text/plain" });
+            const link = document.createElement("a");
+
+            link.href = URL.createObjectURL(file);
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showStatus(statusElement, "Download started.");
+        }
+
+        // Pick a random number. Crypto is preferred for password generation.
+        function getRandomIndex(max) {
+            if (window.crypto && window.crypto.getRandomValues) {
+                const randomValues = new Uint32Array(1);
+                window.crypto.getRandomValues(randomValues);
+                return randomValues[0] % max;
+            }
+
+            return Math.floor(Math.random() * max);
+        }
+
+        // Highlight the current navbar link.
+        function setActiveNavLink(hash) {
+            navLinks.forEach(link => {
+                link.classList.toggle("active", link.getAttribute("href") === hash);
+            });
+        }
+
+        // Smooth-scroll navbar links to their matching sections.
+        navLinks.forEach(link => {
+            link.addEventListener("click", event => {
+                const hash = link.getAttribute("href");
+                const target = document.querySelector(hash);
+
+                if (!target) {
+                    return;
+                }
+
+                event.preventDefault();
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+                history.pushState(null, "", hash);
+                setActiveNavLink(hash);
+            });
+        });
+
+        // Update active nav item while the user scrolls manually.
+        window.addEventListener("scroll", () => {
+            let currentHash = "#home";
+
+            sections.forEach(section => {
+                if (window.scrollY >= section.offsetTop - 90) {
+                    currentHash = "#" + section.id;
+                }
+            });
+
+            setActiveNavLink(currentHash);
+        });
+
+        // Filter cards by their searchable data-name text.
+        toolSearch.addEventListener("input", () => {
+            const searchText = toolSearch.value.trim().toLowerCase();
+
+            toolCards.forEach(card => {
+                const cardName = card.dataset.name.toLowerCase();
+                card.classList.toggle("hidden", !cardName.includes(searchText));
+            });
+        });
+
+        // Count words, characters, characters without spaces, and sentences live.
+        function updateWordCounter() {
+            const text = wordInput.value.trim();
+            const words = text.match(/\b[\w'-]+\b/g) || [];
+            const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [];
+
+            wordCount.textContent = words.length;
+            characterCount.textContent = wordInput.value.length;
+            characterNoSpaceCount.textContent = wordInput.value.replace(/\s/g, "").length;
+            sentenceCount.textContent = text === "" ? 0 : sentences.length;
+        }
+
+        wordInput.addEventListener("input", updateWordCounter);
+
+        document.getElementById("clearWordInput").addEventListener("click", () => {
+            wordInput.value = "";
+            updateWordCounter();
+        });
+
+        document.getElementById("copyWordStats").addEventListener("click", () => {
+            copyText(wordResult.innerText, wordStatus);
+        });
+
+        document.getElementById("downloadWordStats").addEventListener("click", () => {
+            downloadText("word-counter-stats.txt", wordResult.innerText, wordStatus);
+        });
+
+        // Reverse the text entered by the user.
+        document.getElementById("reverseButton").addEventListener("click", () => {
+            const text = reverseInput.value;
+            reverseResult.textContent = text ? text.split("").reverse().join("") : "Please enter text first.";
+        });
+
+        document.getElementById("copyReverseResult").addEventListener("click", () => {
+            copyText(reverseResult.textContent, reverseStatus);
+        });
+
+        document.getElementById("downloadReverseResult").addEventListener("click", () => {
+            downloadText("reversed-text.txt", reverseResult.textContent, reverseStatus);
+        });
+
+        // Convert text to uppercase or lowercase.
+        document.getElementById("upperCaseButton").addEventListener("click", () => {
+            caseResult.textContent = caseInput.value ? caseInput.value.toUpperCase() : "Please enter text first.";
+        });
+
+        document.getElementById("lowerCaseButton").addEventListener("click", () => {
+            caseResult.textContent = caseInput.value ? caseInput.value.toLowerCase() : "Please enter text first.";
+        });
+
+        document.getElementById("copyCaseResult").addEventListener("click", () => {
+            copyText(caseResult.textContent, caseStatus);
+        });
+
+        document.getElementById("downloadCaseResult").addEventListener("click", () => {
+            downloadText("converted-case.txt", caseResult.textContent, caseStatus);
+        });
+
+        // Generate a random password from common safe character groups.
+        document.getElementById("generatePassword").addEventListener("click", () => {
+            const length = Math.min(Math.max(Number(passwordLength.value), 6), 40);
+            const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            let password = "";
+
+            passwordLength.value = length;
+
+            for (let i = 0; i < length; i++) {
+                password += characters[getRandomIndex(characters.length)];
+            }
+
+            passwordResult.textContent = password;
+        });
+
+        document.getElementById("copyPassword").addEventListener("click", () => {
+            copyText(passwordResult.textContent, passwordStatus);
+        });
+
+        document.getElementById("downloadPassword").addEventListener("click", () => {
+            downloadText("generated-password.txt", passwordResult.textContent, passwordStatus);
+        });
+
+        // Keep calculator input limited to safe math characters.
+        function calculateExpression() {
+            if (!calculatorValue) {
+                return;
+            }
+
+            if (!/^[0-9+\-*/%. ]+$/.test(calculatorValue)) {
+                calculatorMessage.textContent = "Invalid calculation.";
+                return;
+            }
+
+            try {
+                const result = Function('"use strict"; return (' + calculatorValue + ')')();
+                calculatorValue = String(Number.isFinite(result) ? result : "");
+                calculatorDisplay.value = calculatorValue || "0";
+                calculatorMessage.textContent = "Calculation complete.";
+            } catch (error) {
+                calculatorMessage.textContent = "Please enter a valid calculation.";
+            }
+        }
+
+        document.querySelectorAll("[data-calc]").forEach(button => {
+            button.addEventListener("click", () => {
+                const value = button.dataset.calc;
+
+                if (value === "clear") {
+                    calculatorValue = "";
+                    calculatorDisplay.value = "0";
+                    calculatorMessage.textContent = "Calculator cleared.";
+                    return;
+                }
+
+                if (value === "backspace") {
+                    calculatorValue = calculatorValue.slice(0, -1);
+                    calculatorDisplay.value = calculatorValue || "0";
+                    return;
+                }
+
+                if (value === "equals") {
+                    calculateExpression();
+                    return;
+                }
+
+                if (value === "copy") {
+                    copyText(calculatorDisplay.value, calculatorStatus);
+                    return;
+                }
+
+                calculatorValue += value;
+                calculatorDisplay.value = calculatorValue;
+            });
+        });
+
+        setActiveNavLink(location.hash || "#home");
+        updateWordCounter();
+    </script>
+</body>
+
+</html>
